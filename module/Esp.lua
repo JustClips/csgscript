@@ -1,9 +1,38 @@
+
+
+
 local espSettings = {
     Name = false, HP = false, Armor = false, Distance = false,
     Team = false, Age = false, Holding = false, Highlight = false
 }
 
 local espObjects = {}
+
+-- Services
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+-- References
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-- Custom modules/tables (these would need to be defined elsewhere)
+local utility = loadstring(
+    game:HttpGet("https://raw.githubusercontent.com/JustClips/csgscript/refs/heads/main/module/Utility.lua")
+)()
+ -- your utility module
+local sections = ...
+local AnimationPresets = {
+    toggleOn = TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+    toggleOff = TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+    sliderMove = TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+    buttonHover = TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    buttonClick = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+    guiResize = TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+    colorShift = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+}
+
 
 local function getArmor(prot)
     if prot:IsA("IntValue") or prot:IsA("NumberValue") then return prot.Value end
@@ -166,5 +195,3 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-
-return espSettings
