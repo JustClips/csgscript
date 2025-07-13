@@ -130,7 +130,7 @@ RunService.RenderStepped:Connect(function()
             local hum = char:FindFirstChildOfClass("Humanoid")
             if hrp and head and hum and hum.Health > 0 then
                 local pos, on = camera:WorldToViewportPoint(head.Position + Vector3.new(0,0.3,0))
-                if not on then continue end
+                if on then
 
                 local hl = char:FindFirstChild("ESP_Highlight")
                 if espSettings.Highlight then
@@ -191,6 +191,7 @@ RunService.RenderStepped:Connect(function()
                     table.insert(drawn, d)
                 end
                 espObjects[pl] = drawn
+                end
             end
         end
     end

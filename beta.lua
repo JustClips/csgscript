@@ -133,8 +133,8 @@ end
 
 -- Layout Constants
 local ROW_Y_START = 60
-local ROW_Y_SPACING = 50
-local ROW_HEIGHT = 42
+local ROW_Y_SPACING = 35
+local ROW_HEIGHT = 32
 local SLIDER_WIDTH = 140
 local SLIDER_HEIGHT = 30
 local TOGGLE_OFFSET_X = 280
@@ -241,7 +241,7 @@ RunService.RenderStepped:Connect(function(dt)
             if h and r then
                 local d = h.MoveDirection
                 if d.Magnitude > .1 then
-                    r.CFrame += d.Unit * currentSpeed * dt
+                    r.CFrame = r.CFrame + d.Unit * currentSpeed * dt
                 end
             end
         end
@@ -773,7 +773,7 @@ local function updateToolList()
     for i = 1, itemsToShow do
         local toolData = sortedTools[i]
         local itemFrame = Instance.new("TextButton")
-        itemFrame.Size = UDim2.new(1, -10, 0, 18)
+        itemFrame.Size = UDim2.new(1, -10, 0, 16)
         itemFrame.Position = UDim2.new(0, 5, 0, yOffset)
         itemFrame.BackgroundColor3 = Color3.fromRGB(20, 22, 26)
         itemFrame.BackgroundTransparency = 0.3
@@ -789,7 +789,7 @@ local function updateToolList()
         toolNameLabel.TextColor3 = shouldPickupTool(toolData.name) and Color3.fromRGB(74, 177, 255) or Color3.fromRGB(200, 200, 200)
         toolNameLabel.BackgroundTransparency = 1
         toolNameLabel.Font = Enum.Font.Gotham
-        toolNameLabel.TextSize = 10
+        toolNameLabel.TextSize = 9
         toolNameLabel.TextTruncate = Enum.TextTruncate.AtEnd
         toolNameLabel.Parent = itemFrame
         
@@ -800,18 +800,18 @@ local function updateToolList()
         countLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
         countLabel.BackgroundTransparency = 1
         countLabel.Font = Enum.Font.GothamBold
-        countLabel.TextSize = 9
+        countLabel.TextSize = 8
         countLabel.TextXAlignment = Enum.TextXAlignment.Right
         countLabel.Parent = itemFrame
         
         itemFrame.MouseEnter:Connect(function()
             TweenService:Create(itemFrame, TweenInfo.new(0.15), {BackgroundTransparency = 0.1}):Play()
-            TweenService:Create(toolNameLabel, TweenInfo.new(0.15), {TextSize = 11}):Play()
+            TweenService:Create(toolNameLabel, TweenInfo.new(0.15), {TextSize = 10}):Play()
         end)
         
         itemFrame.MouseLeave:Connect(function()
             TweenService:Create(itemFrame, TweenInfo.new(0.15), {BackgroundTransparency = 0.3}):Play()
-            TweenService:Create(toolNameLabel, TweenInfo.new(0.15), {TextSize = 10}):Play()
+            TweenService:Create(toolNameLabel, TweenInfo.new(0.15), {TextSize = 9}):Play()
         end)
         
         itemFrame.MouseButton1Click:Connect(function()
@@ -825,7 +825,7 @@ local function updateToolList()
         end)
         
         table.insert(toolListLabels, itemFrame)
-        yOffset = yOffset + 20
+        yOffset = yOffset + 18
     end
     
     if #sortedTools > maxItems then
@@ -840,7 +840,7 @@ local function updateToolList()
         moreLabel.TextXAlignment = Enum.TextXAlignment.Center
         moreLabel.Parent = toolListFrame
         table.insert(toolListLabels, moreLabel)
-        yOffset = yOffset + 18
+        yOffset = yOffset + 16
     end
     
     toolListFrame.CanvasSize = UDim2.new(0, 0, 0, yOffset + 5)
@@ -943,10 +943,13 @@ do
     toolListFrame.BackgroundColor3 = Color3.fromRGB(20, 22, 26)
     toolListFrame.BackgroundTransparency = 0.1
     toolListFrame.BorderSizePixel = 0
-    toolListFrame.ScrollBarThickness = 3
+    toolListFrame.ScrollBarThickness = 6
     toolListFrame.ScrollBarImageColor3 = Color3.fromRGB(80, 170, 255)
+    toolListFrame.ScrollBarImageTransparency = 0.3
     toolListFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     toolListFrame.Visible = true
+    toolListFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+    toolListFrame.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
     toolListFrame.Parent = section
     Instance.new("UICorner", toolListFrame).CornerRadius = UDim.new(0, 13)
     
@@ -1061,12 +1064,10 @@ RunService.RenderStepped:Connect(function()
         local root = cow:FindFirstChild("HumanoidRootPart")
         local basePosition = selfRoot.Position
 
-        if not (root and isnetworkowner(root)) then
-            continue
+        if root and isnetworkowner(root) then
+            local angle = (tick() * 3) + ((2 * math.pi / count) * (i - 1))
+            root.CFrame = CFrame.new(Vector3.new(basePosition.X + math.cos(angle) * 10, basePosition.Y, basePosition.Z + math.sin(angle) * 10), basePosition)
         end
-
-        local angle = (tick() * 3) + ((2 * math.pi / count) * (i - 1))
-        root.CFrame = CFrame.new(Vector3.new(basePosition.X + math.cos(angle) * 10, basePosition.Y, basePosition.Z + math.sin(angle) * 10), basePosition)
     end
 end)
 
@@ -1243,8 +1244,8 @@ do
     label3.TextXAlignment = Enum.TextXAlignment.Left
     
     local killCarrierBtn = Instance.new("TextButton", row3)
-    killCarrierBtn.Size = UDim2.new(0, 100, 0, 32)
-    killCarrierBtn.Position = UDim2.new(0, 190, 0.5, -16)
+    killCarrierBtn.Size = UDim2.new(0, 80, 0, 24)
+    killCarrierBtn.Position = UDim2.new(0, 190, 0.5, -12)
     killCarrierBtn.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
     killCarrierBtn.BorderSizePixel = 0
     killCarrierBtn.Text = "EXECUTE"
@@ -1253,8 +1254,8 @@ do
     killCarrierBtn.TextSize = 14
     Instance.new("UICorner", killCarrierBtn).CornerRadius = UDim.new(0, 8)
     
-    killCarrierBtn.MouseEnter:Connect(function() TweenService:Create(killCarrierBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 104, 0, 36), BackgroundColor3 = Color3.fromRGB(255, 120, 120) }):Play() end)
-    killCarrierBtn.MouseLeave:Connect(function() TweenService:Create(killCarrierBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 100, 0, 32), BackgroundColor3 = Color3.fromRGB(255, 100, 100) }):Play() end)
+    killCarrierBtn.MouseEnter:Connect(function() TweenService:Create(killCarrierBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 84, 0, 28), BackgroundColor3 = Color3.fromRGB(255, 120, 120) }):Play() end)
+    killCarrierBtn.MouseLeave:Connect(function() TweenService:Create(killCarrierBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 80, 0, 24), BackgroundColor3 = Color3.fromRGB(255, 100, 100) }):Play() end)
     killCarrierBtn.MouseButton1Click:Connect(function()
         TweenService:Create(killCarrierBtn, AnimationPresets.buttonClick, { BackgroundColor3 = Color3.fromRGB(200, 50, 50) }):Play()
         TweenService:Create(rowGlow3, AnimationPresets.buttonClick, { BackgroundTransparency = 0.7 }):Play()
@@ -1297,8 +1298,8 @@ do
     label4.TextXAlignment = Enum.TextXAlignment.Left
     
     local plantTreeBtn = Instance.new("TextButton", row4)
-    plantTreeBtn.Size = UDim2.new(0, 100, 0, 32)
-    plantTreeBtn.Position = UDim2.new(0, 190, 0.5, -16)
+    plantTreeBtn.Size = UDim2.new(0, 80, 0, 24)
+    plantTreeBtn.Position = UDim2.new(0, 190, 0.5, -12)
     plantTreeBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
     plantTreeBtn.BorderSizePixel = 0
     plantTreeBtn.Text = "PLANT"
@@ -1307,8 +1308,8 @@ do
     plantTreeBtn.TextSize = 14
     Instance.new("UICorner", plantTreeBtn).CornerRadius = UDim.new(0, 8)
     
-    plantTreeBtn.MouseEnter:Connect(function() TweenService:Create(plantTreeBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 104, 0, 36), BackgroundColor3 = Color3.fromRGB(70, 220, 70) }):Play() end)
-    plantTreeBtn.MouseLeave:Connect(function() TweenService:Create(plantTreeBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 100, 0, 32), BackgroundColor3 = Color3.fromRGB(50, 200, 50) }):Play() end)
+    plantTreeBtn.MouseEnter:Connect(function() TweenService:Create(plantTreeBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 84, 0, 28), BackgroundColor3 = Color3.fromRGB(70, 220, 70) }):Play() end)
+    plantTreeBtn.MouseLeave:Connect(function() TweenService:Create(plantTreeBtn, AnimationPresets.buttonHover, { Size = UDim2.new(0, 80, 0, 24), BackgroundColor3 = Color3.fromRGB(50, 200, 50) }):Play() end)
     plantTreeBtn.MouseButton1Click:Connect(function()
         TweenService:Create(plantTreeBtn, AnimationPresets.buttonClick, { BackgroundColor3 = Color3.fromRGB(30, 150, 30) }):Play()
         TweenService:Create(rowGlow4, AnimationPresets.buttonClick, { BackgroundTransparency = 0.7 }):Play()
@@ -1321,7 +1322,7 @@ do
     
     -- Job GUI Dropdown
     local row5 = Instance.new("Frame")
-    row5.Size = UDim2.new(1, -40, 0, 48)
+    row5.Size = UDim2.new(1, -40, 0, 40)
     row5.Position = UDim2.new(0, 20, 0, yPos)
     row5.BackgroundColor3 = Color3.fromRGB(26, 28, 33)
     row5.BackgroundTransparency = 0.08
@@ -1340,8 +1341,8 @@ do
     Instance.new("UICorner", rowGlow5).CornerRadius = UDim.new(0, 15)
     
     local label5 = Instance.new("TextLabel", row5)
-    label5.Size = UDim2.new(1, -20, 0, 25)
-    label5.Position = UDim2.new(0, 13, 0, 5)
+    label5.Size = UDim2.new(1, -20, 0, 20)
+    label5.Position = UDim2.new(0, 13, 0, 3)
     label5.Text = "Job GUI"
     label5.TextColor3 = Color3.fromRGB(230, 230, 240)
     label5.BackgroundTransparency = 1
@@ -1358,7 +1359,7 @@ do
     end
     
     local jobOptions = {"Harvester", "Hunter", "Warrior", "Engineer"}
-    local jobDropdown = utility:createEnhancedDropdown(row5, UDim2.new(0, 13, 0, 35), jobOptions, function(selectedJob, index)
+    local jobDropdown = utility:createEnhancedDropdown(row5, UDim2.new(0, 13, 0, 25), jobOptions, function(selectedJob, index)
         changeJob(selectedJob)
         TweenService:Create(rowGlow5, AnimationPresets.buttonClick, { BackgroundTransparency = 0.7 }):Play()
         wait(0.2)
