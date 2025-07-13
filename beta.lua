@@ -241,7 +241,7 @@ RunService.RenderStepped:Connect(function(dt)
             if h and r then
                 local d = h.MoveDirection
                 if d.Magnitude > .1 then
-                    r.CFrame += d.Unit * currentSpeed * dt
+                    r.CFrame = r.CFrame + d.Unit * currentSpeed * dt
                 end
             end
         end
@@ -1064,12 +1064,10 @@ RunService.RenderStepped:Connect(function()
         local root = cow:FindFirstChild("HumanoidRootPart")
         local basePosition = selfRoot.Position
 
-        if not (root and isnetworkowner(root)) then
-            continue
+        if root and isnetworkowner(root) then
+            local angle = (tick() * 3) + ((2 * math.pi / count) * (i - 1))
+            root.CFrame = CFrame.new(Vector3.new(basePosition.X + math.cos(angle) * 10, basePosition.Y, basePosition.Z + math.sin(angle) * 10), basePosition)
         end
-
-        local angle = (tick() * 3) + ((2 * math.pi / count) * (i - 1))
-        root.CFrame = CFrame.new(Vector3.new(basePosition.X + math.cos(angle) * 10, basePosition.Y, basePosition.Z + math.sin(angle) * 10), basePosition)
     end
 end)
 
